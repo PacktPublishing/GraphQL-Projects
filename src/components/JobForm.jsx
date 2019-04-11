@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "@reach/router";
 
 const Form = styled.form`
   display: flex;
@@ -19,6 +20,7 @@ const InputContainer = styled.div`
 
 const Submit = styled.input`
   font-size: 32px;
+  padding: 5px;
   margin-top: 15px;
   width: 50%;
   align-self: flex-end;
@@ -26,6 +28,15 @@ const Submit = styled.input`
 
 const JobDescription = styled.textarea`
   font-size: 18px;
+`;
+
+const Cancel = styled(Link)`
+  position: fixed;
+  top: 0;
+  left: 10px;
+  font-size: 18px;
+  margin-top: 15px;
+  color: gray;
 `;
 function JobForm({ id }) {
   const [formState, setFormState] = useState({
@@ -69,6 +80,7 @@ function JobForm({ id }) {
         />
         <Submit type="submit" value="Post" />
       </InputContainer>
+      <Cancel to="/">Cancel</Cancel>
     </Form>
   );
 }
