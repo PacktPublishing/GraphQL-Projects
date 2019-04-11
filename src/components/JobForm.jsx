@@ -36,8 +36,13 @@ function JobForm({ id }) {
   const handleChange = e =>
     setFormState({ ...formState, [e.target.name]: e.target.value });
   const { company, title, description } = formState;
+  const handleSubmit = e => {
+    e.preventDefault();
+    /* TO USE MUTATION HERE */
+    console.log("SUBMITTING:", formState);
+  };
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <InputContainer>
         <Input
           type="text"
