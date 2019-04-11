@@ -2,6 +2,7 @@ import ReactDOM from "react-dom";
 import React from "react";
 import Jobs from "./components/Jobs";
 import Job from "./components/Job";
+import JobForm from "./components/JobForm";
 import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
@@ -15,7 +16,8 @@ const client = new ApolloClient({
 const AppRoot = () => (
   <Router>
     <Jobs path="/" />
-    <Job path="/:id" />
+    <Job path="/view/:id" />
+    <JobForm path="/new" />
   </Router>
 );
 
