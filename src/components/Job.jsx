@@ -7,8 +7,8 @@ import { parseMarkdown } from "../markdownUtils";
 import { Link } from "@reach/router";
 
 const GET_JOB = gql`
-  {
-    jobs_by_pk(id: 10) {
+  query GetJob($jobId: Int!) {
+    jobs_by_pk(id: $jobId) {
       id
       company
       description
@@ -37,7 +37,9 @@ const JobContainer = styled.div`
 `;
 
 function Job(params) {
-  const { data, error, loading } = useQuery(GET_JOB);
+  const { data, error, loading } = useQuery(GET_JOB, {
+    variables: { jobId: params.id },
+  });
   if (loading) {
     return <h1>Loading...</h1>;
   } else if (data) {
