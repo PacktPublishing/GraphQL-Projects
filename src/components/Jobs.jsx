@@ -53,7 +53,7 @@ function Jobs() {
     const renderJobs = data.jobs.map(({ id, company, title }) => (
       <JobContainer>
         <CompanyName>{company}</CompanyName>
-        <JobTitle to={id.toString()}>{title}</JobTitle>
+        <JobTitle to={`/view/${id}`}>{title}</JobTitle>
       </JobContainer>
     ));
     return (
