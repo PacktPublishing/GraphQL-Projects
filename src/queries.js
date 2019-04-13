@@ -12,7 +12,7 @@ export const GET_JOBS = gql`
 
 export const GET_JOB = gql`
   query GetJob($jobId: Int!) {
-    jobs_by_pk(id: $jobId) {
+    job: jobs_by_pk(id: $jobId) {
       id
       company
       description

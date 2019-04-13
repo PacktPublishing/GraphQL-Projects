@@ -22,7 +22,7 @@ function Job(params) {
   if (loading) {
     return <h1>Loading...</h1>;
   } else if (data) {
-    const { description, id, company, link_to_apply } = data.jobs_by_pk;
+    const { description, id, company, link_to_apply } = data.job;
     let convertedDescription = fromDb(description);
     return (
       <JobContainer>
