@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link, navigate } from "@reach/router";
 import { useMutation } from "react-apollo-hooks";
 import gql from "graphql-tag";
+import { toDb } from "../markdownUtils";
 
 const Form = styled.form`
   display: flex;
@@ -77,8 +78,9 @@ function JobForm({ id }) {
   const handleSubmit = e => {
     e.preventDefault();
     const { company, title, description, linkToApply } = formState;
+    const convertedDescription = toDb(description);
     insertJob({
-      variables: { company, title, description, linkToApply },
+        description: convertedDescription,
     }).then(() => navigate("/"));
   };
   return (

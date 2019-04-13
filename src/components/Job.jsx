@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
-import { parseMarkdown } from "../markdownUtils";
+import { fromDb } from "../markdownUtils";
 import { Link, navigate } from "@reach/router";
 
 const GET_JOB = gql`
@@ -67,7 +67,7 @@ function Job(params) {
     return <h1>Loading...</h1>;
   } else if (data) {
     const { description, id, company, link_to_apply } = data.jobs_by_pk;
-    let convertedDescription = parseMarkdown(description);
+    let convertedDescription = fromDb(description);
     return (
       <JobContainer>
         <BackButton to="/"> Back to search </BackButton>
