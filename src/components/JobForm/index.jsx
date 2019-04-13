@@ -1,46 +1,16 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { Link, navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 import { useMutation } from "react-apollo-hooks";
-import gql from "graphql-tag";
-import { toDb } from "../markdownUtils";
+import { toDb } from "../../markdownUtils";
+import {
+  Cancel,
+  Form,
+  InputContainer,
+  Input,
+  JobDescription,
+  Submit,
+} from "./styles";
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  font-size: 24px;
-  margin-top: 10px;
-`;
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-`;
-
-const Submit = styled.input`
-  font-size: 32px;
-  padding: 5px;
-  margin-top: 15px;
-  width: 50%;
-  align-self: flex-end;
-`;
-
-const JobDescription = styled.textarea`
-  font-size: 18px;
-`;
-
-const Cancel = styled(Link)`
-  position: fixed;
-  top: 0;
-  left: 10px;
-  font-size: 18px;
-  margin-top: 15px;
-  color: gray;
-`;
 function JobForm({ id }) {
   const [formState, setFormState] = useState({
     company: "",
