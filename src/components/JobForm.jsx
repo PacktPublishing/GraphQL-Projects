@@ -41,47 +41,19 @@ const Cancel = styled(Link)`
   margin-top: 15px;
   color: gray;
 `;
-
-const INSERT_JOB = gql`
-  mutation InsertJob(
-    $company: String!
-    $linkToApply: String!
-    $title: String!
-    $description: String!
-  ) {
-    insert_jobs(
-      objects: {
-        company: $company
-        link_to_apply: $linkToApply
-        title: $title
-        description: $description
-      }
-    ) {
-      returning {
-        id
-        company
-      }
-    }
-  }
-`;
 function JobForm({ id }) {
   const [formState, setFormState] = useState({
     company: "",
     title: "",
     description: "",
-    linkToApply: "",
   });
   const handleChange = e =>
     setFormState({ ...formState, [e.target.name]: e.target.value });
-  const { company, title, description, linkToApply } = formState;
-  const insertJob = useMutation(INSERT_JOB);
+  const { company, title, description } = formState;
   const handleSubmit = e => {
     e.preventDefault();
-    const { company, title, description, linkToApply } = formState;
-    const convertedDescription = toDb(description);
-    insertJob({
-        description: convertedDescription,
-    }).then(() => navigate("/"));
+    /* TO USE MUTATION HERE */
+    console.log("SUBMITTING:", formState);
   };
   return (
     <Form onSubmit={handleSubmit}>
@@ -99,13 +71,6 @@ function JobForm({ id }) {
           onChange={handleChange}
           value={title}
           name="title"
-        />
-        <Input
-          type="text"
-          placeholder="Link to apply"
-          onChange={handleChange}
-          value={linkToApply}
-          name="linkToApply"
         />
         <JobDescription
           name="description"
