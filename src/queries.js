@@ -42,3 +42,13 @@ export const CREATE_NEW_JOB = gql`
     }
   }
 `;
+
+export const DELETE_JOB = gql`
+  mutation DeleteJob($jobId: Int!) {
+    delete_jobs(where: { id: { _eq: $jobId } }) {
+      returning {
+        id
+      }
+    }
+  }
+`;

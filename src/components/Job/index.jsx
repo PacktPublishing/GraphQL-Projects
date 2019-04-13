@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import { fromDb } from "../../markdownUtils";
 import { navigate } from "@reach/router";
 import {
@@ -10,14 +10,19 @@ import {
   DeleteJob,
   JobDescription,
 } from "./styles";
-import { GET_JOB } from "../../queries";
+import { GET_JOB, DELETE_JOB, GET_JOBS } from "../../queries";
 
 function Job(params) {
   const { data, error, loading } = useQuery(GET_JOB, {
     variables: { jobId: params.id },
   });
+  const deleteJob = useMutation(DELETE_JOB);
   const handleDeleteJob = e => {
-    console.log("DELETING A JOB");
+    console.log("DELETING A JOB", params.id);
+    deleteJob({
+      variables: { jobId: params.id },
+      refetchQueries: [{ query: GET_JOBS }],
+    }).then(() => navigate("/"));
   };
   if (loading) {
     return <h1>Loading...</h1>;
