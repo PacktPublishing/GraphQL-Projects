@@ -16,12 +16,13 @@ function Job(params) {
   const { data, error, loading } = useQuery(GET_JOB, {
     variables: { jobId: params.id },
   });
-  const deleteJob = useMutation(DELETE_JOB);
+  const deleteJob = useMutation(DELETE_JOB, {
+    refetchQueries: [{ query: GET_JOBS }],
+  });
   const handleDeleteJob = e => {
     console.log("DELETING A JOB", params.id);
     deleteJob({
       variables: { jobId: params.id },
-      refetchQueries: [{ query: GET_JOBS }],
     }).then(() => navigate("/"));
   };
   if (loading) {

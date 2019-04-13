@@ -29,7 +29,7 @@ function JobForm({ id }) {
     e.preventDefault();
     /* TO USE MUTATION HERE */
     console.log("SUBMITTING:", formState);
-    createNewJob({ variables: { ...formState } });
+    createNewJob({ variables: { ...formState } }).then(() => navigate("/"));
   };
   return (
     <Form onSubmit={handleSubmit}>
