@@ -1,10 +1,10 @@
 import React from "react";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { parseMarkdown } from "../markdownUtils";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 
 const GET_JOB = gql`
   query GetJob($jobId: Int!) {
@@ -43,12 +43,25 @@ const DeleteJob = styled(ApplyLink)`
   cursor: pointer;
 `;
 
+const DeleteJobFromDb = gql`
+  mutation DeleteJob($jobId: Int!) {
+    delete_jobs(where: { id: { _eq: $jobId } }) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
 function Job(params) {
   const { data, error, loading } = useQuery(GET_JOB, {
     variables: { jobId: params.id },
   });
+  const deleteAJob = useMutation(DeleteJobFromDb);
   const handleDeleteJob = e => {
-    console.log("DELETING A JOB");
+    deleteAJob({ variables: { jobId: parseInt(params.id) } }).then(() =>
+      navigate("/"),
+    );
   };
   if (loading) {
     return <h1>Loading...</h1>;
