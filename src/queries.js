@@ -20,6 +20,14 @@ export const GET_JOB = gql`
     }
   }
 `;
+export const GET_COMPANY_INFO = gql`
+  query CompanyInfo($companyDomain: String!) {
+    company(domain: $companyDomain)
+      @rest(type: "Company", path: "/companies/find?domain={args.domain}") {
+      phone
+    }
+  }
+`;
 
 export const CREATE_NEW_JOB = gql`
   mutation CreateJob(

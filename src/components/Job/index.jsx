@@ -10,12 +10,28 @@ import {
   DeleteJob,
   JobDescription,
 } from "./styles";
-import { GET_JOB, DELETE_JOB, GET_JOBS } from "../../queries";
+import { GET_JOB, DELETE_JOB, GET_JOBS, GET_COMPANY_INFO } from "../../queries";
 
+const getHostname = data => {
+  if (data) {
+    if (data.job) {
+      return data.job.link_to_apply;
+    }
+  } else {
+    return "example.com";
+  }
+};
 function Job(params) {
-  const { data, error, loading } = useQuery(GET_JOB, {
+  const { data: jobData, error, loading: jobLoading } = useQuery(GET_JOB, {
     variables: { jobId: params.id },
   });
+  const { data: companyInfo, loading: companyInfoLoading } = useQuery(
+    GET_COMPANY_INFO,
+    {
+      variables: { companyDomain: getHostname(jobData) },
+      skip: jobLoading,
+    },
+  );
   const deleteJob = useMutation(DELETE_JOB, {
     refetchQueries: [{ query: GET_JOBS }],
   });
@@ -25,15 +41,21 @@ function Job(params) {
       variables: { jobId: params.id },
     }).then(() => navigate("/"));
   };
-  if (loading) {
+  if (jobLoading) {
     return <h1>Loading...</h1>;
-  } else if (data) {
-    const { description, id, company, link_to_apply } = data.job;
+  } else if (jobData) {
+    const { description, id, company, link_to_apply } = jobData.job;
     let convertedDescription = fromDb(description);
+
+    let additionalInformation = undefined;
+    if (!companyInfoLoading) {
+      additionalInformation = <span>{companyInfo.company.phone}</span>;
+    }
     return (
       <JobContainer>
         <BackButton to="/"> Back to search </BackButton>
         <h1>Work for {company}</h1>
+        {additionalInformation}
         <JobDescription source={convertedDescription} />
         <ApplyContainer>
           <DeleteJob onClick={handleDeleteJob}>💥</DeleteJob>
