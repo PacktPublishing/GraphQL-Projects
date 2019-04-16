@@ -16,7 +16,7 @@ const GET_RATES = gql`
 
 function Example() {
   const { data, error, loading } = useQuery(GET_RATES, {
-    variables: { currency }
+    variables: { currency },
   });
   if (loading) {
     return <h1> Loading rates...</h1>;
@@ -25,7 +25,7 @@ function Example() {
     return <h1>Something went wrong: {error}</h1>;
   } else {
     const renderRates = data.rates.map(rate => (
-      <li key={rate.currency}>
+      <li className="bg-blue-400" key={rate.currency}>
         You need {rate.value}
         {rate.currency} to get 1 {currency}
       </li>
