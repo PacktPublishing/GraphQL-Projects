@@ -1,13 +1,14 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import Example from "../components/Example";
+import Example from "./components/Example";
 import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
+import "./index.css";
 
 const client = new ApolloClient({
   uri:
-    "https://48p1r2roz4.sse.codesandbox.io/" /* Example Static GraphQL Backend */
+    "https://48p1r2roz4.sse.codesandbox.io/" /* Example Static GraphQL Backend */,
 });
 
 const App = () => (
