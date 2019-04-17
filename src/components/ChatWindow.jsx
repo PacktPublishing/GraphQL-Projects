@@ -1,18 +1,68 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
-import { ADD_MESSAGE, GET_MESSAGES } from "../queries";
+import { ADD_MESSAGE, GET_MESSAGES, UPDATE_MESSAGE } from "../queries";
+
 function renderMessage({ id, username: name, timestamp: time, text: message }) {
-  return (
-    <div key={id} className="flex items-start mb-4 text-sm">
-      <div className="flex-1 overflow-hidden">
-        <div>
-          <span className="font-bold">{name}</span>
-          <span className="p-1 text-gray-500 text-xs">{time}</span>
+  const [hovered, setHovered] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [messageState, setMessageState] = useState(message);
+  const updateMessage = useMutation(UPDATE_MESSAGE, {});
+  if (editMode) {
+    return (
+      <div className="flex flex-wrap">
+        <div className="w-full">
+          <textarea
+            className="w-full"
+            value={messageState}
+            onChange={e => setMessageState(e.target.value)}
+          />
         </div>
-        <p className="text-black leading-normal">{message}</p>
+        <div className="flex">
+          <input
+            type="button"
+            className="py-1 px-1 rounded bg-gray-300"
+            onClick={() => setEditMode(false)}
+            value="Cancel"
+          />
+          <input
+            type="button"
+            onClick={() =>
+              updateMessage({
+                variables: { id, text: messageState },
+              }).then(() => setEditMode(false))
+            }
+            className="bg-green-500 py-1 px-2 rounded ml-2"
+            value="Save"
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div
+        key={id}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="flex items-start mb-4 text-sm"
+      >
+        <div className="flex-1 overflow-hidden">
+          <div>
+            <span className="font-bold">{name}</span>
+            <span className="p-1 text-gray-500 text-xs">{time}</span>
+            {hovered && (
+              <input
+                type="button"
+                onClick={() => setEditMode(true)}
+                className="py-1 px-1 rounded float-right"
+                value="Edit"
+              />
+            )}
+          </div>
+          <p className="text-black leading-normal">{message}</p>
+        </div>
+      </div>
+    );
+  }
 }
 
 function ChatWindow({ messages }) {

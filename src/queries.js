@@ -23,3 +23,15 @@ export const ADD_MESSAGE = gql`
     }
   }
 `;
+
+export const UPDATE_MESSAGE = gql`
+  mutation UpdateMessage($id: Int!, $text: String!) {
+    update_message(where: { id: { _eq: $id } }, _set: { text: $text }) {
+      returning {
+        id
+        text
+        timestamp
+      }
+    }
+  }
+`;
