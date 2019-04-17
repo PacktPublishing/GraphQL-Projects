@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { GET_MESSAGES } from "../queries";
 import ChatWindow from "./ChatWindow";
 
-function Example() {
+function Layout() {
   const { data, loading } = useQuery(GET_MESSAGES);
+  const [login, setLogin] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  if (!loggedIn) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <form onSubmit={() => setLoggedIn(true)}>
+          <input
+            className="rounded px-2 py-2"
+            onChange={e => setLogin(e.target.value)}
+            type="text"
+            value={login}
+            placeholder="Choose a username"
+          />
+        </form>
+      </div>
+    );
+  }
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -25,7 +43,7 @@ function Example() {
                 >
                   <circle cx={10} cy={10} r={10} />
                 </svg>
-                <span className="text-white opacity-50 text-sm">maxim</span>
+                <span className="text-white opacity-50 text-sm">{login}</span>
               </div>
             </div>
           </div>
@@ -55,4 +73,4 @@ function Example() {
   }
 }
 
-export default Example;
+export default Layout;
