@@ -8,7 +8,7 @@ import "./index.css";
 
 const client = new ApolloClient({
   uri:
-    "https://48p1r2roz4.sse.codesandbox.io/" /* Example Static GraphQL Backend */,
+    "https://gql-projects-chat-app.herokuapp.com/v1alpha1/graphql" /* Example Static GraphQL Backend */,
 });
 
 const App = () => (
