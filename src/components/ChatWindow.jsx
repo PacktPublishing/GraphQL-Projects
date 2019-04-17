@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
 import { ADD_MESSAGE, GET_MESSAGES, UPDATE_MESSAGE } from "../queries";
+import { format } from "timeago.js";
 
 function renderMessage({ id, username: name, timestamp: time, text: message }) {
   const [hovered, setHovered] = useState(false);
@@ -48,7 +49,7 @@ function renderMessage({ id, username: name, timestamp: time, text: message }) {
         <div className="flex-1 overflow-hidden">
           <div>
             <span className="font-bold">{name}</span>
-            <span className="p-1 text-gray-500 text-xs">{time}</span>
+            <span className="p-1 text-gray-500 text-xs">{format(time)}</span>
             {hovered && (
               <input
                 type="button"
