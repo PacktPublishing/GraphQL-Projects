@@ -11,7 +11,6 @@ function Layout() {
 
   const loggedIn = login !== undefined;
 
-  console.log("LOGIN", login);
   if (!loggedIn) {
     return <Login onLogin={setLogin} />;
   }
