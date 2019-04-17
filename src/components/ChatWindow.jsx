@@ -3,7 +3,7 @@ import { useMutation } from "react-apollo-hooks";
 import { ADD_MESSAGE, GET_MESSAGES, UPDATE_MESSAGE } from "../queries";
 import { format } from "timeago.js";
 
-function renderMessage({ id, username: name, timestamp: time, text: message }) {
+function Message({ id, username: name, timestamp: time, text: message }) {
   const [hovered, setHovered] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [messageState, setMessageState] = useState(message);
@@ -67,7 +67,9 @@ function renderMessage({ id, username: name, timestamp: time, text: message }) {
 }
 
 function ChatWindow({ messages }) {
-  const renderedMessages = messages.map(renderMessage);
+  const renderedMessages = messages.map(message => (
+    <Message key={message.id} {...message} />
+  ));
   return (
     <React.Fragment>
       <div className="px-6 py-4 flex-1 overflow-y-scroll">
@@ -82,7 +84,7 @@ function SubmitMessage() {
   const addMessage = useMutation(ADD_MESSAGE, {
     refetchQueries: [{ query: GET_MESSAGES }],
   });
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState("");
   const handleSubmission = e => {
     e.preventDefault();
     addMessage({
