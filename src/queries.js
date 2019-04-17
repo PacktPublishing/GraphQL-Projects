@@ -11,6 +11,27 @@ export const GET_MESSAGES = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query GetUser($username: String!) {
+    matching_user: user_aggregate(where: { username: { _eq: $username } }) {
+      matches: aggregate {
+        count
+      }
+    }
+  }
+`;
+
+export const ADD_USER = gql`
+  mutation AddUser($username: String!) {
+    insert_user(objects: { username: $username }) {
+      returning {
+        id
+        username
+      }
+    }
+  }
+`;
+
 export const ADD_MESSAGE = gql`
   mutation AddMessage($text: String!, $username: String!) {
     insert_message(objects: { text: $text, username: $username }) {

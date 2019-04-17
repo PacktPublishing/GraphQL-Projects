@@ -1,17 +1,40 @@
 import React, { useState } from "react";
-import { useQuery } from "react-apollo-hooks";
-import { GET_MESSAGES } from "../queries";
+import { useQuery, useMutation } from "react-apollo-hooks";
+import { GET_MESSAGES, GET_USER, ADD_USER } from "../queries";
 import ChatWindow from "./ChatWindow";
 
+export const UserContext = React.createContext();
 function Layout() {
   const { data, loading } = useQuery(GET_MESSAGES);
   const [login, setLogin] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const addUser = useMutation(ADD_USER, { variables: { username: login } });
 
+  const { data: userData, loading: userLoading } = useQuery(GET_USER, {
+    variables: { username: login },
+    skip: !loggingIn,
+  });
+
+  if (!loggedIn && userData && userData.matching_user) {
+    if (userData.matching_user.matches.count === 0) {
+      addUser().then(() => setLoggedIn(true));
+    } else {
+      setLoggedIn(true);
+    }
+  }
+  if (loading || userLoading) {
+    return <h1>Loading...</h1>;
+  }
   if (!loggedIn) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <form onSubmit={() => setLoggedIn(true)}>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            setLoggingIn(true);
+          }}
+        >
           <input
             className="rounded px-2 py-2"
             onChange={e => setLogin(e.target.value)}
@@ -22,9 +45,6 @@ function Layout() {
         </form>
       </div>
     );
-  }
-  if (loading) {
-    return <h1>Loading...</h1>;
   }
   if (data.message) {
     return (
@@ -66,7 +86,9 @@ function Layout() {
               </div>
             </div>
           </div>
-          <ChatWindow messages={data.message} />
+          <UserContext.Provider value={login}>
+            <ChatWindow messages={data.message} />
+          </UserContext.Provider>
         </div>
       </div>
     );

@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useMutation } from "react-apollo-hooks";
 import { ADD_MESSAGE, GET_MESSAGES } from "../queries";
+import { UserContext } from "./Layout";
 
 function NewMessage() {
   const addMessage = useMutation(ADD_MESSAGE, {
     refetchQueries: [{ query: GET_MESSAGES }],
   });
   const [message, setMessage] = useState("");
+  const username = useContext(UserContext);
+  console.log("USER:", username);
   const handleSubmission = e => {
     e.preventDefault();
     addMessage({
       variables: {
         text: message,
-        username: "maxim",
+        username,
       },
     }).then(() => setMessage(""));
   };
