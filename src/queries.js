@@ -10,3 +10,16 @@ export const GET_MESSAGES = gql`
     }
   }
 `;
+
+export const ADD_MESSAGE = gql`
+  mutation AddMessage($text: String!, $username: String!) {
+    insert_message(objects: { text: $text, username: $username }) {
+      returning {
+        id
+        timestamp
+        text
+        username
+      }
+    }
+  }
+`;

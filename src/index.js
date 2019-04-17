@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import Example from "./components/Example";
+import Layout from "./components/Layout";
 import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
@@ -14,7 +14,7 @@ const client = new ApolloClient({
 const App = () => (
   <ApolloProvider client={client}>
     <ApolloHooksProvider client={client}>
-      <Example />
+      <Layout />
     </ApolloHooksProvider>
   </ApolloProvider>
 );
