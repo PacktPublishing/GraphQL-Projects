@@ -1,50 +1,22 @@
 import React, { useState } from "react";
-import { useQuery, useMutation } from "react-apollo-hooks";
-import { GET_MESSAGES, GET_USER, ADD_USER } from "../queries";
+import { useQuery } from "react-apollo-hooks";
+import { GET_MESSAGES } from "../queries";
 import ChatWindow from "./ChatWindow";
+import Login from "./Login";
 
 export const UserContext = React.createContext();
 function Layout() {
   const { data, loading } = useQuery(GET_MESSAGES);
-  const [login, setLogin] = useState("");
-  const [loggingIn, setLoggingIn] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const addUser = useMutation(ADD_USER, { variables: { username: login } });
+  const [login, setLogin] = useState();
 
-  const { data: userData, loading: userLoading } = useQuery(GET_USER, {
-    variables: { username: login },
-    skip: !loggingIn,
-  });
+  const loggedIn = login !== undefined;
 
-  if (!loggedIn && userData && userData.matching_user) {
-    if (userData.matching_user.matches.count === 0) {
-      addUser().then(() => setLoggedIn(true));
-    } else {
-      setLoggedIn(true);
-    }
-  }
-  if (loading || userLoading) {
-    return <h1>Loading...</h1>;
-  }
+  console.log("LOGIN", login);
   if (!loggedIn) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            setLoggingIn(true);
-          }}
-        >
-          <input
-            className="rounded px-2 py-2"
-            onChange={e => setLogin(e.target.value)}
-            type="text"
-            value={login}
-            placeholder="Choose a username"
-          />
-        </form>
-      </div>
-    );
+    return <Login onLogin={setLogin} />;
+  }
+  if (loading) {
+    return <h1>Loading...</h1>;
   }
   if (data.message) {
     return (
