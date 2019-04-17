@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useMutation } from "react-apollo-hooks";
 import { ADD_MESSAGE, GET_MESSAGES } from "../queries";
-import { UserContext } from "./Layout";
+import UserContext from "../UserContext";
 
 function NewMessage() {
   const addMessage = useMutation(ADD_MESSAGE, {

@@ -3,8 +3,8 @@ import { useQuery } from "react-apollo-hooks";
 import { GET_MESSAGES } from "../queries";
 import ChatWindow from "./ChatWindow";
 import Login from "./Login";
+import UserContext from "../UserContext";
 
-export const UserContext = React.createContext();
 function Layout() {
   const { data, loading } = useQuery(GET_MESSAGES);
   const [login, setLogin] = useState();
