@@ -33,22 +33,31 @@ export default class Auth {
   }
 
   getAccessToken() {
-    return this.accessToken;
+    return this.accessToken || localStorage.getItem("token");
   }
 
   getIdToken() {
     return this.idToken;
   }
 
+  getAuthId() {
+    return this.authId;
+  }
+
   setSession(authResult) {
+    console.log("AUTH RESULT", authResult);
     // Set isLoggedIn flag in localStorage
     localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("token", authResult.accessToken);
+    let sub = authResult.idTokenPayload.sub;
+    localStorage.setItem("authId", sub);
 
     // Set the time that the access token will expire at
     let expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
     this.accessToken = authResult.accessToken;
     this.idToken = authResult.idToken;
     this.expiresAt = expiresAt;
+    this.authId = sub;
 
     // navigate to the  route
     navigate("/");
