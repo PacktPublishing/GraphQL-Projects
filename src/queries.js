@@ -22,8 +22,8 @@ export const GET_USER = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation AddUser($username: String!) {
-    insert_user(objects: { username: $username }) {
+  mutation AddUser($username: String!, $user_auth_id: String!) {
+    insert_user(objects: { username: $username, auth_id: $user_auth_id }) {
       returning {
         id
         username
