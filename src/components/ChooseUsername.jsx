@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { GET_USER, ADD_USER } from "../queries";
 import { useMutation, useQuery } from "react-apollo-hooks";
+import AuthContext from "./Auth/AuthContext";
 
-function Login({ usernameSelected }) {
+function ChooseUsername({ usernameSelected }) {
   const [username, setUsername] = useState("");
   const [creatingUser, setCreatingUser] = useState(false);
-  const addUser = useMutation(ADD_USER, { variables: { username: username } });
+  const auth = useContext(AuthContext);
+  const addUser = useMutation(ADD_USER, {
+    variables: {
+      username: username,
+      user_auth_id: auth.getAuthId(),
+    },
+  });
 
   const { data: userData, loading: userLoading } = useQuery(GET_USER, {
     variables: { username: username },
@@ -44,4 +51,4 @@ function Login({ usernameSelected }) {
   );
 }
 
-export default Login;
+export default ChooseUsername;
