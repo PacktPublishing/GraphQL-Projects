@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { GET_MESSAGES } from "../queries";
 import ChatWindow from "./ChatWindow";
-import ChooseUsername from "./Login";
+import ChooseUsername from "./ChooseUsername";
 import UserContext from "../UserContext";
 import { Router } from "@reach/router";
 
