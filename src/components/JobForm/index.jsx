@@ -10,20 +10,26 @@ import {
   JobDescription,
   Submit,
 } from "./styles";
+import { CREATE_NEW_JOB, GET_JOBS } from "../../queries";
 
 function JobForm({ id }) {
   const [formState, setFormState] = useState({
     company: "",
     title: "",
     description: "",
+    link_to_apply: "",
   });
   const handleChange = e =>
     setFormState({ ...formState, [e.target.name]: e.target.value });
-  const { company, title, description } = formState;
+  const { company, title, description, link_to_apply } = formState;
+  const createNewJob = useMutation(CREATE_NEW_JOB, {
+    refetchQueries: [{ query: GET_JOBS }],
+  });
   const handleSubmit = e => {
     e.preventDefault();
     /* TO USE MUTATION HERE */
     console.log("SUBMITTING:", formState);
+    createNewJob({ variables: { ...formState } }).then(() => navigate("/"));
   };
   return (
     <Form onSubmit={handleSubmit}>
@@ -41,6 +47,13 @@ function JobForm({ id }) {
           onChange={handleChange}
           value={title}
           name="title"
+        />
+        <Input
+          type="text"
+          placeholder="Application link"
+          onChange={handleChange}
+          value={link_to_apply}
+          name="link_to_apply"
         />
         <JobDescription
           name="description"
