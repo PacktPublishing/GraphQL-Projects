@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."jobs" ADD COLUMN "title" text NOT NULL DEFAULT 'A Job'
-  type: run_sql
