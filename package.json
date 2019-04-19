@@ -5,13 +5,16 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "@reach/router": "^1.2.1",
     "apollo-boost": "0.3.1",
+    "google-map-react": "^1.1.4",
     "graphql": "14.2.1",
     "react": "16.8.3",
     "react-apollo": "2.5.3",
     "react-apollo-hooks": "0.4.4",
     "react-dom": "16.8.3",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "typescript": "3.3.3"
