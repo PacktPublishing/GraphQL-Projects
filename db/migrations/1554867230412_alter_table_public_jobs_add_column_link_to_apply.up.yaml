@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."jobs" ADD COLUMN "link_to_apply" text NOT NULL
-  type: run_sql
