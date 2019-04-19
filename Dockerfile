@@ -1,6 +1,8 @@
 FROM hasura/graphql-engine:v1.0.0-alpha44.cli-migrations as builder
 COPY ./db/migrations /hasura-migrations
 COPY ./run_migrations.sh /
+COPY docker-entrypoint.sh /bin/
+ENV HASURA_GRAPHQL_SERVER_TIMEOUT=60
 ENTRYPOINT ["/bin/sh", "-c", "./run_migrations.sh"]
 CMD ["/bin/sh", "-c", "./run_migrations.sh"]
 
