@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."job_skills"("skill_id" integer NOT NULL, "priority"
+      integer NOT NULL, "job_id" integer NOT NULL, PRIMARY KEY ("skill_id","job_id")
+      , FOREIGN KEY ("skill_id") REFERENCES "skills"("id") ON UPDATE restrict ON DELETE
+      restrict, FOREIGN KEY ("job_id") REFERENCES "jobs"("id") ON UPDATE restrict
+      ON DELETE restrict);
+  type: run_sql
+- args:
+    name: job_skills
+    schema: public
+  type: add_existing_table_or_view
