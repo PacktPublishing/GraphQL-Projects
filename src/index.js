@@ -18,7 +18,9 @@ const httpLink = createHttpLink({
 });
 const restLink = new RestLink({
   uri: "https://company.clearbit.com/v2",
-  headers: { Authorization: "Bearer sk_f0cad2868c07c130eaf0b09936d8c0d3" },
+  headers: {
+    Authorization: `Bearer ${process.env.REACT_APP_CLEARBIT_API_KEY}`,
+  },
 });
 
 const client = new ApolloClient({
