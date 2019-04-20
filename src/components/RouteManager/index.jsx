@@ -81,7 +81,7 @@ const RouteManager = () => {
           <label>Vehicle location update frequency</label>
           <RangeInput
             value={updateInterval}
-            min={5}
+            min={1}
             max={60}
             onChange={e => setUpdateInterval(e.target.value)}
           />
