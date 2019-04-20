@@ -3,7 +3,7 @@ import RouteSelector from "./RouteSelector";
 import { Form, Box, Text, RangeInput, Button, FormField } from "grommet";
 import { useMutation } from "react-apollo-hooks";
 import { ADD_VEHICLE, ADD_LOCATION } from "../../queries";
-import { getNextLocation, isEndOfRoute } from "./route_handler";
+import { getNextLocation, isEndOfRoute, getFirstRoute } from "./route_handler";
 
 function updateLocation({ vehicleId, setPolls, addLocation }) {
   return () => {
@@ -30,7 +30,7 @@ function updateLocation({ vehicleId, setPolls, addLocation }) {
   };
 }
 const RouteManager = () => {
-  const [route, setRoute] = useState("");
+  const [route, setRoute] = useState(getFirstRoute());
   const [updateInterval, setUpdateInterval] = useState(10);
   const [name, setName] = useState("");
   const [polls, setPolls] = useState([]);
