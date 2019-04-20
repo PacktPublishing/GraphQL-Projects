@@ -9,6 +9,8 @@
     "apollo-boost": "0.3.1",
     "google-map-react": "^1.1.4",
     "graphql": "14.2.1",
+    "grommet": "^2.6.6",
+    "polished": "^3.2.0",
     "react": "16.8.3",
     "react-apollo": "2.5.3",
     "react-apollo-hooks": "0.4.4",
