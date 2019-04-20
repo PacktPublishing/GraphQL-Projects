@@ -10,7 +10,7 @@ export const ADD_VEHICLE = gql`
 `;
 
 export const ADD_LOCATION = gql`
-  mutation AddLocation($vehicleId: String!, $location: String!) {
+  mutation AddLocation($vehicleId: Int!, $location: String!) {
     insert_vehicle_location(
       objects: { vehicle_id: $vehicleId, location: $location }
     ) {
