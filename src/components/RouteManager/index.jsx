@@ -51,7 +51,14 @@ const RouteManager = () => {
       );
       setPolls(
         polls.concat([
-          { pollId: newInterval, vehicleId: vehicleId, route, index: -1 },
+          {
+            pollId: newInterval,
+            name,
+            updateInterval,
+            vehicleId: vehicleId,
+            route,
+            index: -1,
+          },
         ]),
       );
     });
@@ -79,6 +86,15 @@ const RouteManager = () => {
             onChange={e => setUpdateInterval(e.target.value)}
           />
           <Text>Every {updateInterval} seconds</Text>
+          <h2>Polled vehicles list:</h2>
+          <ul>
+            {polls.map(({ route, name, vehicleId, updateInterval, index }) => (
+              <li key={vehicleId}>
+                Travelling {route} with {name} every {updateInterval} seconds -{" "}
+                {index}
+              </li>
+            ))}
+          </ul>
           <Button primary label="Add Vehicle" type="submit" />
         </Box>
       </Form>
