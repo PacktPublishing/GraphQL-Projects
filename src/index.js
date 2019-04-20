@@ -1,19 +1,18 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import Example from "./components/Example";
+import Routes from "./components/Routes";
 import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
 
 const client = new ApolloClient({
-  uri:
-    "https://48p1r2roz4.sse.codesandbox.io/" /* Example Static GraphQL Backend */,
+  uri: "https://gql-projects-location-tracking.herokuapp.com/v1alpha1/graphql",
 });
 
 const App = () => (
   <ApolloProvider client={client}>
     <ApolloHooksProvider client={client}>
-      <Example />
+      <Routes />
     </ApolloHooksProvider>
   </ApolloProvider>
 );
