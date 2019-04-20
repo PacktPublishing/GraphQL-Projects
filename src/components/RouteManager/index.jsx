@@ -5,7 +5,7 @@ import { useMutation } from "react-apollo-hooks";
 import { ADD_VEHICLE, ADD_LOCATION } from "../../queries";
 import { getNextLocation, isEndOfRoute } from "./route_handler";
 
-function updateLocation({ vehicleId, setPolls }) {
+function updateLocation({ vehicleId, setPolls, addLocation }) {
   return () => {
     setPolls(polls => {
       const poll = polls.find(x => x.vehicleId === vehicleId);
@@ -15,6 +15,12 @@ function updateLocation({ vehicleId, setPolls }) {
         return polls.filter(x => x.vehicleId !== vehicleId);
       } else {
         const newLocation = getNextLocation(index, route);
+        addLocation({
+          variables: {
+            vehicleId,
+            location: `(${newLocation[0]}, ${newLocation[1]})`,
+          },
+        });
         console.log("ADDING NEW LOCATION", newLocation);
         return polls.map(poll =>
           poll.vehicleId === vehicleId ? { ...poll, index: index + 1 } : poll,
@@ -29,6 +35,7 @@ const RouteManager = () => {
   const [name, setName] = useState("");
   const [polls, setPolls] = useState([]);
   const addVehicle = useMutation(ADD_VEHICLE);
+  const addLocation = useMutation(ADD_LOCATION);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -39,7 +46,7 @@ const RouteManager = () => {
     }).then(x => {
       const vehicleId = x.data.insert_vehicle.returning[0].id;
       const newInterval = setInterval(
-        updateLocation({ polls, vehicleId, setPolls }),
+        updateLocation({ vehicleId, setPolls, addLocation }),
         updateInterval * 1000,
       );
       setPolls(
