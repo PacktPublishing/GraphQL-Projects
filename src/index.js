@@ -6,7 +6,7 @@ import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
 
 const client = new ApolloClient({
-  uri: "https://gql-projects-location-tracking.herokuapp.com/v1alpha1/graphql",
+  uri: "https://gql-projects-vehicle-tracking.herokuapp.com/v1alpha1/graphql",
 });
 
 const App = () => (
