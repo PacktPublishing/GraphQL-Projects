@@ -1,5 +1,6 @@
 - args:
-    sql: CREATE TABLE public."vehicle"("id" text NOT NULL, "name" text NOT NULL, PRIMARY
+    sql:
+      CREATE TABLE public."vehicle"("id" serial NOT NULL, "name" text NOT NULL, PRIMARY
       KEY ("id") );
   type: run_sql
 - args:
