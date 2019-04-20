@@ -3,13 +3,33 @@ import RouteSelector from "./RouteSelector";
 import { Form, Box, Text, RangeInput, Button, FormField } from "grommet";
 import { useMutation } from "react-apollo-hooks";
 import { ADD_VEHICLE, ADD_LOCATION } from "../../queries";
+import { getNextLocation, isEndOfRoute } from "./route_handler";
 
+function updateLocation({ vehicleId, setPolls }) {
+  return () => {
+    setPolls(polls => {
+      const poll = polls.find(x => x.vehicleId === vehicleId);
+      const { index, route, pollId } = poll;
+      if (isEndOfRoute(index, route)) {
+        clearInterval(pollId);
+        return polls.filter(x => x.vehicleId !== vehicleId);
+      } else {
+        const newLocation = getNextLocation(index, route);
+        console.log("ADDING NEW LOCATION", newLocation);
+        return polls.map(poll =>
+          poll.vehicleId === vehicleId ? { ...poll, index: index + 1 } : poll,
+        );
+      }
+    });
+  };
+}
 const RouteManager = () => {
   const [route, setRoute] = useState("");
   const [updateInterval, setUpdateInterval] = useState(10);
   const [name, setName] = useState("");
   const [polls, setPolls] = useState([]);
   const addVehicle = useMutation(ADD_VEHICLE);
+
   const handleSubmit = e => {
     e.preventDefault();
     addVehicle({
@@ -17,11 +37,16 @@ const RouteManager = () => {
         name,
       },
     }).then(x => {
-      const vehicleId = x.returning.id;
-      const newInterval = setInterval(() => {
-        console.log("ADDING LOCATION for vehicle ", vehicleId);
-      }, updateInterval);
-      setPolls(polls.concat([{ poll: newInterval, vehicleId: vehicleId }]));
+      const vehicleId = x.data.insert_vehicle.returning[0].id;
+      const newInterval = setInterval(
+        updateLocation({ polls, vehicleId, setPolls }),
+        updateInterval * 1000,
+      );
+      setPolls(
+        polls.concat([
+          { pollId: newInterval, vehicleId: vehicleId, route, index: -1 },
+        ]),
+      );
     });
   };
 
