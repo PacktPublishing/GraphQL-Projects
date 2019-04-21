@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "grommet";
 import GoogleMapReact from "google-map-react";
 import styled from "styled-components";
 import "./map_hacks.css";
-import { useQuery } from "react-apollo-hooks";
+import { useSubscription } from "react-apollo-hooks";
 import { GET_LOCATIONS } from "../../queries";
 import { deserialize } from "../../coordinates";
 import { sample } from "lodash";
@@ -64,25 +64,29 @@ const MarkerContainer = styled(Box)`
   transform: translate(-12px, -12px);
 `;
 
-function renderVehicle({ locations, id, name }) {
+function renderVehicle({ locations, id, name }, index) {
   if (locations.length > 0) {
     const lastLocation = locations[0].location;
     const [lat, lng] = deserialize(lastLocation);
     return (
-      <MarkerContainer
-        key={id}
-        lat={lat}
-        lng={lng}
-        $markerHolderClassName="marker"
-      >
-        <Marker pad="small" round background={sample(colors)} />
-        {name}
-      </MarkerContainer>
+      <Vehicle {...{ id, lat, lng, name }} $markerHolderClassName="marker" />
     );
   }
 }
+function Vehicle({ id, lat, lng, name }) {
+  const [color, setColor] = useState("brand");
+  useEffect(() => {
+    setColor(sample(colors));
+  }, []);
+  return (
+    <MarkerContainer key={id}>
+      <Marker pad="small" round background={color} />
+      {name}
+    </MarkerContainer>
+  );
+}
 function SimpleMap(incomingProps) {
-  const { data, loading } = useQuery(GET_LOCATIONS);
+  const { data, loading } = useSubscription(GET_LOCATIONS);
   if (loading) {
     return <Loading />;
   } else {
