@@ -4,6 +4,7 @@ import { Form, Box, Text, RangeInput, Button, FormField } from "grommet";
 import { useMutation } from "react-apollo-hooks";
 import { ADD_VEHICLE, ADD_LOCATION } from "../../queries";
 import { getNextLocation, isEndOfRoute, getFirstRoute } from "./route_handler";
+import { serialize } from "../../coordinates";
 
 function updateLocation({ vehicleId, setPolls, addLocation }) {
   return () => {
@@ -18,7 +19,7 @@ function updateLocation({ vehicleId, setPolls, addLocation }) {
         addLocation({
           variables: {
             vehicleId,
-            location: `(${newLocation[0]}, ${newLocation[1]})`,
+            location: serialize(newLocation),
           },
         });
         console.log("ADDING NEW LOCATION", newLocation);

@@ -20,3 +20,15 @@ export const ADD_LOCATION = gql`
     }
   }
 `;
+
+export const GET_LOCATIONS = gql`
+  {
+    vehicle {
+      locations(limit: 1, order_by: { timestamp: desc }) {
+        location
+      }
+      id
+      name
+    }
+  }
+`;
