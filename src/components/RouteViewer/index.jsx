@@ -6,6 +6,7 @@ import "./map_hacks.css";
 import { useQuery } from "react-apollo-hooks";
 import { GET_LOCATIONS } from "../../queries";
 import { deserialize } from "../../coordinates";
+import { sample } from "lodash";
 
 function Loading() {
   return (
@@ -46,8 +47,21 @@ function Loading() {
     </Box>
   );
 }
-const Marker = styled(Box)`
-  transition: all 500ms ease-in;
+const colors = [
+  "brand",
+  "accent-1",
+  "accent-2",
+  "accent-3",
+  "accent-4",
+  "neutral-1",
+  "neutral-2",
+  "neutral-3",
+  "neutral-4",
+];
+const Marker = styled(Box)``;
+const MarkerContainer = styled(Box)`
+  /* Centering the circle at the center of positon */
+  transform: translate(-12px, -12px);
 `;
 
 function renderVehicle({ locations, id, name }) {
@@ -55,10 +69,15 @@ function renderVehicle({ locations, id, name }) {
     const lastLocation = locations[0].location;
     const [lat, lng] = deserialize(lastLocation);
     return (
-      <Box key={id} lat={lat} lng={lng} $markerHolderClassName="marker">
-        <Marker pad="small" round background="accent-1" />
+      <MarkerContainer
+        key={id}
+        lat={lat}
+        lng={lng}
+        $markerHolderClassName="marker"
+      >
+        <Marker pad="small" round background={sample(colors)} />
         {name}
-      </Box>
+      </MarkerContainer>
     );
   }
 }
@@ -70,10 +89,10 @@ function SimpleMap(incomingProps) {
     const vehicles = data.vehicle.map(renderVehicle);
     const defaultProps = {
       center: {
-        lat: 59.95,
-        lng: 30.33,
+        lat: 39.3444798,
+        lng: -100.0677148,
       },
-      zoom: 11,
+      zoom: 5,
     };
     const props = { ...defaultProps, ...incomingProps };
 

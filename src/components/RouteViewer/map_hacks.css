@@ -1,3 +1,4 @@
 .marker {
+  /* Moving between positions with easy */
   transition: all 500ms ease-in;
 }
