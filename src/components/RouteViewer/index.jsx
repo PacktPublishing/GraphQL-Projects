@@ -19,7 +19,6 @@ function Loading() {
         width="40px"
         height="40px"
         viewBox="0 0 40 40"
-        enable-background="new 0 0 40 40"
       >
         <path
           opacity="0.2"
@@ -69,7 +68,11 @@ function renderVehicle({ locations, id, name }, index) {
     const lastLocation = locations[0].location;
     const [lat, lng] = deserialize(lastLocation);
     return (
-      <Vehicle {...{ id, lat, lng, name }} $markerHolderClassName="marker" />
+      <Vehicle
+        key={id}
+        {...{ id, lat, lng, name }}
+        $markerHolderClassName="marker"
+      />
     );
   }
 }
@@ -79,7 +82,7 @@ function Vehicle({ id, lat, lng, name }) {
     setColor(sample(colors));
   }, []);
   return (
-    <MarkerContainer key={id}>
+    <MarkerContainer>
       <Marker pad="small" round background={color} />
       {name}
     </MarkerContainer>
