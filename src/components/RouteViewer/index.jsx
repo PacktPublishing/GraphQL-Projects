@@ -90,7 +90,9 @@ function Vehicle({ id, lat, lng, name }) {
   );
 }
 function SimpleMap(incomingProps) {
-  const { data, loading, error } = useSubscription(GET_LOCATIONS, {});
+  const { data, loading, error } = useSubscription(GET_LOCATIONS, {
+    variables: { trackVehicles: incomingProps.trackVehicles },
+  });
   if (loading) {
     return <Loading />;
   }
