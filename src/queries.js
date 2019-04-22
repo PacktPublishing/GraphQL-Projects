@@ -4,6 +4,7 @@ export const ADD_VEHICLE = gql`
     insert_vehicle(objects: { name: $name }) {
       returning {
         id
+        name
       }
     }
   }
@@ -16,14 +17,15 @@ export const ADD_LOCATION = gql`
     ) {
       returning {
         id
+        location
       }
     }
   }
 `;
 
 export const GET_LOCATIONS = gql`
-  subscription {
-    vehicle {
+  subscription GetLocations($trackVehicles: [Int]!) {
+    vehicle(where: { id: { _in: $trackVehicles } }) {
       locations(limit: 1, order_by: { timestamp: desc }) {
         location
       }
