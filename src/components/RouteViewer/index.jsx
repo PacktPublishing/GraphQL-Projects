@@ -90,9 +90,7 @@ function Vehicle({ id, lat, lng, name }) {
   );
 }
 function SimpleMap(incomingProps) {
-  const { data, loading, error } = useSubscription(GET_LOCATIONS, {
-    variables: { trackVehicles: incomingProps.trackVehicles },
-  });
+  const { data, loading, error } = useSubscription(GET_LOCATIONS, {});
   if (loading) {
     return <Loading />;
   }
@@ -167,10 +165,7 @@ const RouteViewer = () => {
             ))}
           </Box>
         </Box>
-        <SimpleMap
-          width="large"
-          trackVehicles={tracked.filter(x => x.tracked).map(x => x.id)}
-        />
+        <SimpleMap width="large" />
       </Box>
     </Box>
   );
