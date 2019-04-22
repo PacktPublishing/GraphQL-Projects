@@ -69,7 +69,7 @@ const RouteManager = () => {
     <Box align="center">
       <h1>Manage routes</h1>
       <Form onSubmit={handleSubmit}>
-        <Box width="medium" pad="medium" gap="medium">
+        <Box pad="medium" gap="medium">
           <FormField
             label="Vehicle name"
             onChange={e => setName(e.target.value)}

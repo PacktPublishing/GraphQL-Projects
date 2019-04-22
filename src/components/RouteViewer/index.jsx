@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Box } from "grommet";
 import GoogleMapReact from "google-map-react";
-import styled from "styled-components";
-import "./map_hacks.css";
-import { useSubscription } from "react-apollo-hooks";
-import { GET_LOCATIONS } from "../../queries";
-import { deserialize } from "../../coordinates";
+import { Box, CheckBox } from "grommet";
 import { sample } from "lodash";
+import React, { useEffect, useState } from "react";
+import { useQuery, useSubscription } from "react-apollo-hooks";
+import styled from "styled-components";
+import { deserialize } from "../../coordinates";
+import { GET_LOCATIONS, GET_VEHICLES } from "../../queries";
+import RouteManager from "../RouteManager";
+import "./map_hacks.css";
 
 function Loading() {
   return (
@@ -89,32 +90,89 @@ function Vehicle({ id, lat, lng, name }) {
   );
 }
 function SimpleMap(incomingProps) {
-  const { data, loading } = useSubscription(GET_LOCATIONS);
+  const { data, loading, error } = useSubscription(GET_LOCATIONS, {
+    variables: { trackVehicles: incomingProps.trackVehicles },
+  });
   if (loading) {
     return <Loading />;
-  } else {
-    const vehicles = data.vehicle.map(renderVehicle);
-    const defaultProps = {
-      center: {
-        lat: 39.3444798,
-        lng: -100.0677148,
-      },
-      zoom: 5,
-    };
-    const props = { ...defaultProps, ...incomingProps };
-
-    return (
-      <div style={{ height: "100vh", width: "100%" }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
-          defaultCenter={props.center}
-          defaultZoom={props.zoom}
-        >
-          {vehicles}
-        </GoogleMapReact>
-      </div>
-    );
   }
+  if (error) {
+    return <div>Error! {JSON.stringify(error)}</div>;
+  }
+  const vehicles = data.vehicle.map(renderVehicle);
+  const defaultProps = {
+    center: {
+      lat: 39.3444798,
+      lng: -100.0677148,
+    },
+    zoom: 4,
+  };
+  const props = { ...defaultProps, ...incomingProps };
+
+  return (
+    <div style={{ height: "100vh", width: "100%" }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
+        defaultCenter={props.center}
+        defaultZoom={props.zoom}
+      >
+        {vehicles}
+      </GoogleMapReact>
+    </div>
+  );
 }
-const RouteViewer = () => <SimpleMap />;
+const RouteViewer = () => {
+  const { data, loading, error } = useQuery(GET_VEHICLES);
+  const [tracked, setTracked] = useState([]);
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <div>Error! {JSON.stringify(error)}</div>;
+  }
+  if (tracked.length !== data.vehicle.length) {
+    const initialTracking = data.vehicle.map(val => ({
+      id: val.id,
+      tracked: false,
+    }));
+    setTracked(initialTracking);
+    return <Loading />;
+  }
+
+  return (
+    <Box direction="row">
+      <Box elevation="medium" flex={{ grow: 1, shrink: 1 }} basis="30%">
+        <RouteManager width="small" />
+      </Box>
+      <Box flex={{ grow: 3, shrink: 3 }}>
+        <Box elevation="small" pad="small">
+          <h3>Vehicles to track:</h3>
+          <Box direction="row" wrap justify="between">
+            {data.vehicle.map(({ id, name }) => (
+              <Box pad="xsmall">
+                <CheckBox
+                  toggle
+                  radioGroup="vehicles"
+                  label={name}
+                  checked={tracked.find(x => x.id === id).tracked}
+                  onChange={e => {
+                    setTracked(prevState =>
+                      prevState.map(x =>
+                        x.id === id ? { ...x, tracked: e.target.checked } : x,
+                      ),
+                    );
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
+        </Box>
+        <SimpleMap
+          width="large"
+          trackVehicles={tracked.filter(x => x.tracked).map(x => x.id)}
+        />
+      </Box>
+    </Box>
+  );
+};
 export default RouteViewer;

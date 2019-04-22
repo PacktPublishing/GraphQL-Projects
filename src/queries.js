@@ -32,3 +32,11 @@ export const GET_LOCATIONS = gql`
     }
   }
 `;
+export const GET_VEHICLES = gql`
+  query {
+    vehicle {
+      id
+      name
+    }
+  }
+`;
