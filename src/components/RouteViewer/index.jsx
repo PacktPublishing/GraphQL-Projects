@@ -167,7 +167,10 @@ const RouteViewer = () => {
             ))}
           </Box>
         </Box>
-        <SimpleMap width="large" />
+        <SimpleMap
+          width="large"
+          trackVehicles={tracked.filter(x => x.tracked).map(x => x.id)}
+        />
       </Box>
     </Box>
   );
