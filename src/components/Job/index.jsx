@@ -21,17 +21,29 @@ const getHostname = data => {
     return "example.com";
   }
 };
+
+function ExtraCompanyInfo({ companyDomain }) {
+  const { loading, data } = useQuery(GET_COMPANY_INFO, {
+    variables: {
+      companyDomain,
+    },
+  });
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  return (
+    <div>
+      <span>{data.company && data.company.phone}</span>
+    </div>
+  );
+}
+
 function Job(params) {
-  const { data: jobData, error, loading: jobLoading } = useQuery(GET_JOB, {
+  const { data, error, loading } = useQuery(GET_JOB, {
     variables: { jobId: params.id },
   });
-  const { data: companyInfo, loading: companyInfoLoading } = useQuery(
-    GET_COMPANY_INFO,
-    {
-      variables: { companyDomain: getHostname(jobData) },
-      skip: jobLoading,
-    },
-  );
+
   const deleteJob = useMutation(DELETE_JOB, {
     refetchQueries: [{ query: GET_JOBS }],
   });
@@ -41,21 +53,16 @@ function Job(params) {
       variables: { jobId: params.id },
     }).then(() => navigate("/"));
   };
-  if (jobLoading) {
+  if (loading) {
     return <h1>Loading...</h1>;
-  } else if (jobData) {
-    const { description, id, company, link_to_apply } = jobData.job;
+  } else if (data) {
+    const { description, id, company, link_to_apply } = data.job;
     let convertedDescription = fromDb(description);
-
-    let additionalInformation = undefined;
-    if (!companyInfoLoading) {
-      additionalInformation = <span>{companyInfo.company.phone}</span>;
-    }
     return (
       <JobContainer>
         <BackButton to="/"> Back to search </BackButton>
         <h1>Work for {company}</h1>
-        {additionalInformation}
+        <ExtraCompanyInfo companyDomain={getHostname(data)} />
         <JobDescription source={convertedDescription} />
         <ApplyContainer>
           <DeleteJob onClick={handleDeleteJob}>💥</DeleteJob>
