@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import RouteSelector from "./RouteSelector";
 import { Form, Box, Text, RangeInput, Button, FormField } from "grommet";
 import { useMutation } from "react-apollo-hooks";
-import { ADD_VEHICLE, ADD_LOCATION } from "../../queries";
+import { ADD_VEHICLE, ADD_LOCATION, GET_VEHICLES } from "../../queries";
 import { getNextLocation, isEndOfRoute, getFirstRoute } from "./route_handler";
 import { serialize } from "../../coordinates";
 
@@ -41,6 +41,13 @@ const RouteManager = () => {
   const handleSubmit = e => {
     e.preventDefault();
     addVehicle({
+      update: (cache, { data }) => {
+        const { vehicle } = cache.readQuery({ query: GET_VEHICLES });
+        cache.writeQuery({
+          query: GET_VEHICLES,
+          data: { vehicle: vehicle.concat(data.insert_vehicle.returning[0]) },
+        });
+      },
       variables: {
         name,
       },
