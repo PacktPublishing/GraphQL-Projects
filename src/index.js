@@ -4,6 +4,7 @@ import Example from "./components/Example";
 import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import ApolloClient from "apollo-boost";
+import "./index.css";
 
 const client = new ApolloClient({
   uri:
