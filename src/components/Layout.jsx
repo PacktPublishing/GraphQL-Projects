@@ -1,21 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { GET_MESSAGES } from "../queries";
 import ChatWindow from "./ChatWindow";
-import Login from "./Login";
+import ChooseUsername from "./ChooseUsername";
 import UserContext from "../UserContext";
+import { Router } from "@reach/router";
+
+import Auth from "./Auth/Auth.js";
+import Callback from "./Auth/Callback";
+import AuthContext from "./Auth/AuthContext";
+import Loading from "./Loading";
+
+function Routes() {
+  return (
+    <AuthContext.Provider value={new Auth()}>
+      <Router>
+        <Layout path="/" />
+        <Callback path="/callback" />
+      </Router>
+    </AuthContext.Provider>
+  );
+}
 
 function Layout() {
   const { data, loading } = useQuery(GET_MESSAGES);
-  const [login, setLogin] = useState();
+  const [userName, setUsername] = useState();
 
-  const loggedIn = login !== undefined;
+  const usernameSelected = userName !== undefined;
 
-  if (!loggedIn) {
-    return <Login onLogin={setLogin} />;
+  const auth = useContext(AuthContext);
+  if (!auth.isAuthenticated()) {
+    auth.login();
+    return null;
   }
+  if (!usernameSelected) {
+    return <ChooseUsername usernameSelected={setUsername} />;
+  }
+
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <Loading />;
   }
   if (data.message) {
     return (
@@ -34,7 +57,9 @@ function Layout() {
                 >
                   <circle cx={10} cy={10} r={10} />
                 </svg>
-                <span className="text-white opacity-50 text-sm">{login}</span>
+                <span className="text-white opacity-50 text-sm">
+                  {userName}
+                </span>
               </div>
             </div>
           </div>
@@ -57,7 +82,7 @@ function Layout() {
               </div>
             </div>
           </div>
-          <UserContext.Provider value={login}>
+          <UserContext.Provider value={userName}>
             <ChatWindow messages={data.message} />
           </UserContext.Provider>
         </div>
@@ -66,4 +91,4 @@ function Layout() {
   }
 }
 
-export default Layout;
+export default Routes;
