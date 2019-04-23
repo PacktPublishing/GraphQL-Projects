@@ -1,0 +1,16 @@
+- args:
+    permission:
+      allow_upsert: true
+      check: {}
+      columns:
+      - text
+      - username
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: message
+      schema: public
+  type: create_insert_permission

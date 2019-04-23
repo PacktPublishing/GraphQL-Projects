@@ -1,0 +1,15 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - text
+      - timestamp
+      - username
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: message
+      schema: public
+  type: create_select_permission

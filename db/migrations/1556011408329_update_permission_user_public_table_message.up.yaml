@@ -1,0 +1,18 @@
+- args:
+    permission:
+      columns:
+      - text
+      - timestamp
+      filter:
+        user:
+          auth_id:
+            _eq: X-Hasura-User-Id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: message
+      schema: public
+  type: create_update_permission

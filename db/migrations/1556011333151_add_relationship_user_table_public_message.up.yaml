@@ -1,0 +1,8 @@
+- args:
+    name: user
+    table:
+      name: message
+      schema: public
+    using:
+      foreign_key_constraint_on: username
+  type: create_object_relationship
